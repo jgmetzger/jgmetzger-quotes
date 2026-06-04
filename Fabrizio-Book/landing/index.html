@@ -51,14 +51,49 @@
   .hero .wrap{position:relative; z-index:2; width:100%;}
   .hero-grid{display:grid; grid-template-columns:.92fr 1.08fr; gap:4rem; align-items:center; padding:7rem 0 5rem;}
 
-  .cover-wrap{perspective:1400px; display:flex; align-items:center; justify-content:center;}
-  .cover{
-    width:100%; max-width:340px; height:auto; aspect-ratio:760/1196; border-radius:8px; display:block;
-    box-shadow:0 40px 80px rgba(0,0,0,.65), 0 0 60px var(--teal-glow);
-    transform:rotateY(-13deg) rotateX(3deg);
-    transition:transform .7s var(--ease);
+  .cover-wrap{perspective:1900px; display:flex; align-items:center; justify-content:center; padding:1.5rem 0;}
+  /* 3D book mockup built from the flat cover */
+  .book3d{
+    --bw:290px; --bh:calc(var(--bw) * 1196 / 760); --thick:42px;
+    position:relative; width:var(--bw); height:var(--bh);
+    transform-style:preserve-3d;
+    transform:rotateY(-26deg) rotateX(4deg);
+    transition:transform .8s var(--ease);
   }
-  .cover:hover{transform:rotateY(-6deg) translateY(-4px);}
+  .book3d:hover{transform:rotateY(-15deg) rotateX(2deg) translateY(-6px);}
+  .book3d .cover{
+    position:absolute; top:0; left:0; width:100%; height:100%;
+    object-fit:cover; display:block;
+    border-radius:3px 7px 7px 3px;
+    transform:translateZ(calc(var(--thick) / 2));
+    box-shadow:0 0 1px rgba(0,0,0,.5);
+    backface-visibility:hidden;
+  }
+  /* page block (right edge) */
+  .book-pages{
+    position:absolute; top:5px; bottom:5px; right:calc(var(--thick) / -2);
+    width:var(--thick); transform:rotateY(90deg);
+    background:repeating-linear-gradient(to right, #c8c0ac 0, #fbf8f1 1.5px, #c8c0ac 3px);
+    border-radius:0 1px 1px 0;
+  }
+  /* back cover */
+  .book-back{
+    position:absolute; top:0; left:0; width:100%; height:100%;
+    transform:translateZ(calc(var(--thick) / -2));
+    background:linear-gradient(135deg, #0d1b26, #05090d);
+    border-radius:3px 7px 7px 3px;
+  }
+  /* soft ground shadow + cover glow */
+  .book3d::before{
+    content:""; position:absolute; inset:0; border-radius:3px 7px 7px 3px;
+    transform:translateZ(calc(var(--thick) / 2));
+    box-shadow:0 44px 80px rgba(0,0,0,.6), 0 0 70px var(--teal-glow); z-index:-1;
+  }
+  .book3d::after{
+    content:""; position:absolute; left:4%; right:-6%; bottom:-30px; height:38px;
+    background:radial-gradient(ellipse at center, rgba(0,0,0,.6), transparent 72%);
+    transform:rotateX(80deg); filter:blur(8px); z-index:-2;
+  }
 
   .hero-title{font-family:var(--disp); font-weight:600; font-size:clamp(52px,9vw,104px); line-height:1; color:#fff; margin:0 0 1.2rem; letter-spacing:.04em; text-shadow:0 0 38px var(--teal-glow), 0 0 12px rgba(79,163,199,.4);}
   .hero-tag{font-family:var(--serif); font-style:italic; font-weight:500; font-size:clamp(22px,3vw,30px); color:var(--gold-soft); margin:0 0 1.4rem;}
@@ -148,15 +183,14 @@
 
   @media (max-width:880px){
     .hero-grid{grid-template-columns:1fr; gap:2.6rem; text-align:center; padding-top:6rem;}
-    .cover{transform:none; max-width:260px;}
-    .cover:hover{transform:translateY(-4px);}
+    .book3d{--bw:230px; --thick:34px; transform:rotateY(-20deg) rotateX(3deg);}
     .hero-btns{justify-content:center;}
     .author-grid{grid-template-columns:1fr; gap:2rem; justify-items:center; text-align:center;}
     .book-cards{grid-template-columns:1fr;}
   }
   @media (prefers-reduced-motion:reduce){
     .reveal{opacity:1; transform:none; transition:none;}
-    .cover{transition:none;}
+    .book3d{transition:none;}
     html{scroll-behavior:auto;}
   }
 </style>
@@ -175,7 +209,11 @@
   <div class="wrap">
     <div class="hero-grid">
       <div class="cover-wrap reveal">
-        <img class="cover" src="../assets/fabrizio-cover.jpg" width="760" height="1196" alt="Cover of the novel Fabrizio by Dieter Schaede, with a glowing cross of light over a dark teal background." />
+        <div class="book3d">
+          <span class="book-back" aria-hidden="true"></span>
+          <span class="book-pages" aria-hidden="true"></span>
+          <img class="cover" src="../assets/fabrizio-cover.jpg" width="760" height="1196" alt="The novel Fabrizio by Dieter Schaede, shown as a book — a glowing cross of light over a dark teal background." />
+        </div>
       </div>
       <div>
         <p class="eyebrow reveal">A New Novel · Coming Worldwide 1 December</p>
