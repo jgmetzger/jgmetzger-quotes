@@ -69,19 +69,29 @@
     box-shadow:0 0 1px rgba(0,0,0,.5);
     backface-visibility:hidden;
   }
-  /* lighting overlay on the front cover.
-     A static spine shadow + a gloss band whose position (--shine) is driven
-     by the book's rotation, so the highlight slides as the book turns. */
+  /* spine shadow on the binding edge (static) */
   .book-sheen{
     position:absolute; top:0; left:0; width:100%; height:100%;
     transform:translateZ(calc(var(--thick) / 2 + 0.2px));
     border-radius:3px 7px 7px 3px; pointer-events:none;
-    background:
-      linear-gradient(90deg, rgba(0,0,0,.34) 0%, rgba(0,0,0,.12) 5%, rgba(0,0,0,0) 13%),
-      linear-gradient(112deg, rgba(255,255,255,0) 40%, rgba(255,255,255,.34) 50%, rgba(255,255,255,.08) 57%, rgba(255,255,255,0) 66%);
-    background-repeat:no-repeat, no-repeat;
-    background-size:100% 100%, 320% 100%;
-    background-position:0 0, var(--shine, 22%) 0;
+    background:linear-gradient(90deg, rgba(0,0,0,.34) 0%, rgba(0,0,0,.12) 5%, rgba(0,0,0,0) 13%);
+  }
+  /* glossy sheen streak — brightens rather than covers (screen blend);
+     its position (--shine) is driven by the book's rotation so it sweeps
+     across the cover as the book turns. */
+  .book-gloss{
+    position:absolute; top:0; left:0; width:100%; height:100%;
+    transform:translateZ(calc(var(--thick) / 2 + 0.3px));
+    border-radius:3px 7px 7px 3px; pointer-events:none;
+    mix-blend-mode:screen;
+    background:linear-gradient(110deg,
+      rgba(255,255,255,0) 43%,
+      rgba(255,255,255,.08) 47.5%,
+      rgba(255,255,255,.26) 50%,
+      rgba(255,255,255,.08) 52.5%,
+      rgba(255,255,255,0) 57%);
+    background-repeat:no-repeat; background-size:340% 100%;
+    background-position:var(--shine, 22%) 0;
     transition:background-position .25s ease-out;
   }
   /* page block (right edge) */
@@ -230,6 +240,7 @@
           <span class="book-pages" aria-hidden="true"></span>
           <img class="cover" src="../assets/fabrizio-cover.jpg" width="760" height="1196" alt="The novel Fabrizio by Dieter Schaede, shown as a book — a glowing cross of light over a dark teal background." />
           <span class="book-sheen" aria-hidden="true"></span>
+          <span class="book-gloss" aria-hidden="true"></span>
         </div>
       </div>
       <div>
