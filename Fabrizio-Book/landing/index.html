@@ -69,31 +69,27 @@
     box-shadow:0 0 1px rgba(0,0,0,.5);
     backface-visibility:hidden;
   }
-  /* lighting overlay on the front cover for depth */
+  /* lighting overlay on the front cover.
+     A static spine shadow + a gloss band whose position (--shine) is driven
+     by the book's rotation, so the highlight slides as the book turns. */
   .book-sheen{
     position:absolute; top:0; left:0; width:100%; height:100%;
     transform:translateZ(calc(var(--thick) / 2 + 0.2px));
     border-radius:3px 7px 7px 3px; pointer-events:none;
     background:
-      linear-gradient(105deg, rgba(255,255,255,.22) 0%, rgba(255,255,255,.06) 14%, rgba(255,255,255,0) 34%),
       linear-gradient(90deg, rgba(0,0,0,.34) 0%, rgba(0,0,0,.12) 5%, rgba(0,0,0,0) 13%),
-      linear-gradient(270deg, rgba(255,255,255,.14) 0%, rgba(255,255,255,0) 4%);
+      linear-gradient(112deg, rgba(255,255,255,0) 40%, rgba(255,255,255,.34) 50%, rgba(255,255,255,.08) 57%, rgba(255,255,255,0) 66%);
+    background-repeat:no-repeat, no-repeat;
+    background-size:100% 100%, 320% 100%;
+    background-position:0 0, var(--shine, 22%) 0;
+    transition:background-position .25s ease-out;
   }
-  /* cursor-tracking glare (set --gx/--gy from JS) */
-  .book-glare{
-    position:absolute; top:0; left:0; width:100%; height:100%;
-    transform:translateZ(calc(var(--thick) / 2 + 0.3px));
-    border-radius:3px 7px 7px 3px; pointer-events:none;
-    background:radial-gradient(circle at var(--gx, 30%) var(--gy, 18%),
-      rgba(255,255,255,.6), rgba(255,255,255,.18) 16%, rgba(255,255,255,0) 44%);
-    mix-blend-mode:screen; opacity:0; transition:opacity .35s ease;
-  }
-  .book3d:hover .book-glare{opacity:1;}
   /* page block (right edge) */
   .book-pages{
     position:absolute; top:5px; bottom:5px; right:calc(var(--thick) / -2);
     width:var(--thick); transform:rotateY(90deg);
-    background:repeating-linear-gradient(to right, #c8c0ac 0, #fbf8f1 1.5px, #c8c0ac 3px);
+    background:repeating-linear-gradient(to right, #b7ae98 0, #fdfbf6 1.5px, #b7ae98 3px);
+    box-shadow:inset 0 0 6px rgba(0,0,0,.35);
     border-radius:0 1px 1px 0;
   }
   /* back cover */
@@ -234,7 +230,6 @@
           <span class="book-pages" aria-hidden="true"></span>
           <img class="cover" src="../assets/fabrizio-cover.jpg" width="760" height="1196" alt="The novel Fabrizio by Dieter Schaede, shown as a book — a glowing cross of light over a dark teal background." />
           <span class="book-sheen" aria-hidden="true"></span>
-          <span class="book-glare" aria-hidden="true"></span>
         </div>
       </div>
       <div>
@@ -412,8 +407,10 @@
         var ry = -26 + nx * 14;   // turn with cursor but stay angled so the pages show
         var rx = 4 - ny * 12;     // pitch up/down with cursor
         book.style.transform = 'rotateY(' + ry + 'deg) rotateX(' + rx + 'deg) translateY(-6px)';
-        book.style.setProperty('--gx', ((nx + 0.5) * 100).toFixed(1) + '%');
-        book.style.setProperty('--gy', ((ny + 0.5) * 100).toFixed(1) + '%');
+        // Move the gloss band as the book rotates (fixed light, turning surface).
+        // ry runs roughly -33..-19; map that to the band sweeping across the cover.
+        var shine = (-19 - ry) / 14 * 70 + 8;   // ~8% (turned away) -> ~78% (turned toward)
+        book.style.setProperty('--shine', shine.toFixed(1) + '%');
       }
       book.addEventListener('pointerenter', function () {
         book.style.transition = 'transform .18s ease-out';
@@ -428,8 +425,7 @@
         if (raf) { cancelAnimationFrame(raf); raf = null; }
         book.style.transition = '';      // ease back via the CSS .8s transition
         book.style.transform = '';       // return to the resting tilt
-        book.style.removeProperty('--gx');
-        book.style.removeProperty('--gy');
+        book.style.removeProperty('--shine');
       });
     }
   })();
