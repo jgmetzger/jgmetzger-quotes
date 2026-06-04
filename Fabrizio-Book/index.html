@@ -1,21 +1,400 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="robots" content="noindex, nofollow" />
-  <title>Fabrizio — Launch Proposal · jgmetzger.</title>
-  <style>
-    body{margin:0;min-height:100vh;display:flex;align-items:center;justify-content:center;
-      background:#0a0a0b;color:#f2f0ed;font-family:system-ui,sans-serif;font-weight:300;padding:2rem;text-align:center}
-    .dot{color:#7c5cfc}
-    code{color:#7c5cfc}
-  </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="robots" content="noindex, nofollow" />
+<title>A launch system for Fabrizio · jgmetzger.</title>
+<meta name="description" content="Book launch proposal for Fabrizio — prepared by James Metzger, jgmetzger." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@1,400;1,500;1,600&family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --black:#0a0a0b; --white:#fafafa; --offwhite:#f2f0ed;
+    --purple:#7c5cfc; --purple-light:#9b80ff; --purple-dark:#5a3fd4;
+    --purple-glow:rgba(124,92,252,0.12);
+    --g1:#141416; --g2:#1e1e22; --g3:#2a2a30; --g4:#52525b; --g5:#8b8b96; --g6:#b4b4be;
+    --sans:'Outfit',sans-serif; --serif:'Cormorant Garamond',Georgia,serif;
+    --mono:'JetBrains Mono',monospace; --ease:cubic-bezier(0.16,1,0.3,1);
+  }
+
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0; background:var(--black); color:var(--offwhite);
+    font-family:var(--sans); font-weight:300; line-height:1.6;
+    -webkit-font-smoothing:antialiased; overflow-x:hidden;
+  }
+
+  /* Fixed grain overlay */
+  .grain{
+    position:fixed; inset:0; z-index:9999; pointer-events:none; opacity:.025;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  a{color:inherit;}
+
+  .ital{font-family:var(--serif); font-style:italic; font-weight:500; font-size:1.12em;}
+
+  .eyebrow{
+    font-family:var(--mono); font-size:11px; font-weight:500;
+    letter-spacing:.28em; text-transform:uppercase; color:var(--purple-light);
+    display:inline-flex; align-items:center; gap:.6em; margin:0 0 1.4rem;
+  }
+  .eyebrow .dot{width:6px; height:6px; border-radius:50%; background:var(--purple);}
+
+  .wrap{max-width:1080px; margin:0 auto; padding:0 28px;}
+  section{padding:6.5rem 0; border-top:1px solid var(--g1);}
+
+  h2{
+    font-family:var(--sans); font-weight:600; letter-spacing:-0.02em;
+    font-size:clamp(28px,4.4vw,44px); line-height:1.1; margin:0 0 1.6rem;
+  }
+  h2 .ital{font-size:1.14em;}
+  .body{color:var(--g6); font-size:clamp(16px,1.6vw,18px); max-width:680px;}
+
+  /* Nav */
+  nav{
+    position:sticky; top:0; z-index:100;
+    backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px);
+    background:rgba(10,10,11,.62); border-bottom:1px solid var(--g1);
+  }
+  nav .wrap{display:flex; align-items:center; justify-content:space-between; padding-top:18px; padding-bottom:18px;}
+  .wordmark{font-family:var(--sans); font-weight:600; font-size:18px; letter-spacing:-0.02em;}
+  .wordmark .p{color:var(--purple);}
+  nav .tag{font-family:var(--mono); font-size:11px; letter-spacing:.18em; text-transform:uppercase; color:var(--g5);}
+
+  /* Hero */
+  .hero{position:relative; overflow:hidden; border-top:none;}
+  .hero .glow{
+    position:absolute; top:-10%; left:50%; transform:translateX(-50%);
+    width:900px; height:600px; max-width:120vw;
+    background:radial-gradient(ellipse at center, var(--purple-glow), transparent 70%);
+    pointer-events:none; z-index:0;
+  }
+  .hero .wrap{position:relative; z-index:1;}
+  .hero h1{
+    font-family:var(--sans); font-weight:600; letter-spacing:-0.03em;
+    font-size:clamp(38px,6.4vw,72px); line-height:1.04; margin:0 0 1.8rem; max-width:13ch;
+  }
+  .hero h1 .ital{font-size:1.16em;}
+  .lede{color:var(--g6); font-size:clamp(18px,2vw,21px); max-width:680px; margin:0 0 3rem;}
+  .meta-row{display:flex; flex-wrap:wrap; gap:2.5rem;}
+  .meta-item .k{font-family:var(--mono); font-size:11px; letter-spacing:.2em; text-transform:uppercase; color:var(--g5); margin:0 0 .5rem;}
+  .meta-item .v{font-size:15px; color:var(--offwhite);}
+
+  /* Impact rows */
+  .impact{margin-top:2.5rem; border-top:1px solid var(--g1);}
+  .impact .row{
+    display:flex; gap:1.6rem; align-items:flex-start;
+    padding:1.6rem .6rem; border-bottom:1px solid var(--g1);
+    transition:background .3s var(--ease);
+  }
+  .impact .row:hover{background:var(--purple-glow);}
+  .impact .num{font-family:var(--mono); font-size:13px; font-weight:500; color:var(--purple-light); padding-top:3px; min-width:2ch;}
+  .impact .txt{color:var(--g6); font-size:clamp(16px,1.7vw,18px);}
+  .impact .txt b{color:var(--offwhite); font-weight:500;}
+
+  /* Cards */
+  .cards{display:grid; grid-template-columns:repeat(2,1fr); gap:1.4rem; margin-top:2.5rem;}
+  .card{
+    position:relative; border:1px solid var(--g3); border-radius:14px;
+    padding:1.8rem 1.8rem 1.8rem 2rem; overflow:hidden;
+    background:linear-gradient(160deg, var(--g1), rgba(20,20,22,.3));
+    transition:transform .4s var(--ease), border-color .4s var(--ease);
+  }
+  .card::before{content:""; position:absolute; left:0; top:0; bottom:0; width:2px; background:var(--purple);}
+  .card:hover{transform:translateY(-2px); border-color:var(--g4);}
+  .card .kicker{font-family:var(--mono); font-size:11px; letter-spacing:.18em; text-transform:uppercase; color:var(--purple-light); margin:0 0 .9rem;}
+  .card h3{font-family:var(--sans); font-weight:500; font-size:19px; margin:0 0 .7rem; letter-spacing:-0.01em;}
+  .card p{color:var(--g6); font-size:15px; margin:0;}
+  .pill{
+    display:inline-block; margin-top:1rem; font-family:var(--mono); font-size:10px;
+    letter-spacing:.14em; text-transform:uppercase; color:var(--purple-light);
+    border:1px solid var(--purple-dark); border-radius:999px; padding:.35em .8em;
+  }
+
+  /* Fix-first grid */
+  .fix-grid{display:grid; grid-template-columns:300px 1fr; gap:3rem; margin-top:2.6rem; align-items:start;}
+  .cover-fig{margin:0; position:relative;}
+  .cover-fig img{width:100%; border-radius:10px; box-shadow:0 30px 70px rgba(0,0,0,.6); display:block;}
+  .cover-fig .highlight{
+    position:absolute; left:8%; right:8%; bottom:9%; height:13%;
+    border:1.5px solid var(--purple); border-radius:5px;
+    box-shadow:0 0 22px var(--purple-glow); pointer-events:none;
+  }
+  .cover-fig figcaption{font-family:var(--mono); font-size:11px; line-height:1.6; letter-spacing:.04em; color:var(--g5); margin-top:1.1rem;}
+  .fix-lists{display:flex; flex-direction:column; gap:2.2rem;}
+  .fix-group .gh{font-family:var(--mono); font-size:11px; letter-spacing:.2em; text-transform:uppercase; color:var(--g6); margin:0 0 1.1rem; padding-bottom:.6rem; border-bottom:1px solid var(--g1);}
+  .fix-group ol{list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:1rem;}
+  .fix-group li{display:flex; gap:1rem; color:var(--g6); font-size:15.5px;}
+  .fix-group li .n{font-family:var(--mono); font-size:12px; color:var(--purple-light); padding-top:2px; min-width:2ch;}
+  code{font-family:var(--mono); font-size:.86em; background:var(--g2); color:var(--offwhite); padding:.12em .45em; border-radius:4px;}
+
+  /* Pricing table */
+  .price{margin-top:2.6rem; border:1px solid var(--g3); border-radius:14px; overflow:hidden;}
+  .price .prow{display:grid; grid-template-columns:1fr auto; gap:1.5rem; align-items:center; padding:1.9rem 2rem; border-bottom:1px solid var(--g1);}
+  .price .prow:last-child{border-bottom:none;}
+  .price .prow.core{background:linear-gradient(120deg, var(--purple-glow), transparent 70%);}
+  .price .pname{font-family:var(--sans); font-weight:500; font-size:18px; margin:0 0 .5rem;}
+  .price .pdesc{color:var(--g5); font-size:14px; max-width:48ch;}
+  .price .pamt{text-align:right;}
+  .price .pamt .amt{font-family:var(--sans); font-weight:600; font-size:30px; letter-spacing:-0.02em;}
+  .price .pamt .lab{font-family:var(--mono); font-size:10px; letter-spacing:.14em; text-transform:uppercase; color:var(--purple-light); margin-top:.4rem;}
+  .price-note{font-family:var(--mono); font-size:11px; letter-spacing:.04em; color:var(--g5); margin-top:1.1rem;}
+
+  /* Callout */
+  .callout{background:var(--g1); border-left:2px solid var(--purple); border-radius:0 12px 12px 0; padding:2rem 2.2rem; margin-top:2.4rem; max-width:760px;}
+  .callout .kicker{font-family:var(--mono); font-size:11px; letter-spacing:.2em; text-transform:uppercase; color:var(--purple-light); margin:0 0 1rem;}
+  .callout p{color:var(--g6); margin:0; font-size:16px;}
+
+  /* Close */
+  .close{text-align:center;}
+  .close h2{max-width:none;}
+  .btn-row{display:flex; gap:1rem; justify-content:center; flex-wrap:wrap; margin:2.4rem 0 3rem;}
+  .btn{
+    display:inline-flex; align-items:center; justify-content:center;
+    font-family:var(--sans); font-weight:500; font-size:15px; letter-spacing:.01em;
+    padding:.95em 2em; border-radius:999px; text-decoration:none; cursor:pointer;
+    border:1px solid transparent; transition:transform .3s var(--ease), background .3s var(--ease), border-color .3s var(--ease);
+  }
+  .btn:active{transform:scale(.975);}
+  .btn.filled{background:var(--purple); color:var(--white); border-color:var(--purple);}
+  .btn.filled:hover{background:var(--purple-light);}
+  .btn.ghost{background:transparent; color:var(--offwhite); border-color:var(--g4);}
+  .btn.ghost:hover{border-color:var(--purple); color:var(--purple-light);}
+  .sig{font-family:var(--serif); font-style:italic; font-weight:500; font-size:24px; color:var(--offwhite);}
+
+  /* Footer */
+  footer{border-top:1px solid var(--g1); padding:3.5rem 0;}
+  footer .wrap{display:flex; flex-direction:column; gap:.8rem; align-items:flex-start;}
+  footer .ftag{font-family:var(--mono); font-size:11px; letter-spacing:.18em; text-transform:uppercase; color:var(--g5);}
+
+  /* Reveal */
+  .reveal{opacity:0; transform:translateY(24px); transition:opacity .8s var(--ease), transform .8s var(--ease);}
+  .reveal.in{opacity:1; transform:none;}
+
+  @media (max-width:760px){
+    section{padding:4.5rem 0;}
+    .cards{grid-template-columns:1fr;}
+    .fix-grid{grid-template-columns:1fr; gap:2.4rem;}
+    .price .prow{grid-template-columns:1fr; gap:1rem;}
+    .price .pamt{text-align:left;}
+    .meta-row{gap:1.6rem;}
+  }
+  @media (prefers-reduced-motion:reduce){
+    .reveal{opacity:1; transform:none; transition:none;}
+    html{scroll-behavior:auto;}
+  }
+</style>
 </head>
 <body>
-  <main>
-    <h1>jgmetzger<span class="dot">.</span></h1>
-    <p>Proposal content pending — this page will be replaced by <code>Fabrizio-Launch-Proposal.html</code>.</p>
-  </main>
+<div class="grain" aria-hidden="true"></div>
+
+<nav aria-label="Primary">
+  <div class="wrap">
+    <span class="wordmark">jgmetzger<span class="p">.</span></span>
+    <span class="tag">Launch Proposal / Confidential</span>
+  </div>
+</nav>
+
+<!-- 2. Hero -->
+<header class="hero">
+  <div class="glow" aria-hidden="true"></div>
+  <div class="wrap" style="padding-top:7rem; padding-bottom:7rem;">
+    <p class="eyebrow reveal"><span class="dot"></span>Book Launch Proposal</p>
+    <h1 class="reveal">A launch system for <i class="ital">Fabrizio.</i></h1>
+    <p class="lede reveal">Not a list of setup tasks. A system that gets the book found, turns the click into a sale, and builds Dieter an audience he owns, ready and waiting for the next book.</p>
+    <div class="meta-row reveal">
+      <div class="meta-item"><p class="k">Prepared for</p><p class="v">Dieter Schaede</p></div>
+      <div class="meta-item"><p class="k">Prepared by</p><p class="v">James Metzger · jgmetzger.</p></div>
+      <div class="meta-item"><p class="k">Re</p><p class="v">Fabrizio · Worldwide launch</p></div>
+    </div>
+  </div>
+</header>
+
+<!-- 3. Core idea -->
+<section>
+  <div class="wrap">
+    <p class="eyebrow reveal"><span class="dot"></span>The core idea</p>
+    <h2 class="reveal">Most pre-launch work stops at <i class="ital">setup.</i></h2>
+    <p class="body reveal">Keywords, a Goodreads page, a few early readers are plumbing; they don't answer the two questions that sell books — where do you send interested people, and how do you keep them so they buy the next book. So this is a system, not a task list, already half-built thanks to the backlist and the sequel on the site.</p>
+  </div>
+</section>
+
+<!-- 4. What moves the needle -->
+<section>
+  <div class="wrap">
+    <p class="eyebrow reveal"><span class="dot"></span>What actually moves the needle</p>
+    <h2 class="reveal">The honest order of <i class="ital">impact.</i></h2>
+    <div class="impact reveal">
+      <div class="row"><span class="num">01</span><span class="txt"><b>A listing that converts</b> — the description is what turns a browser into a buyer.</span></div>
+      <div class="row"><span class="num">02</span><span class="txt"><b>A home base you own</b> — a page with email signup; one-week launch vs compounding audience.</span></div>
+      <div class="row"><span class="num">03</span><span class="txt"><b>Honest early reviews</b> — a small opt-in reader group; reviews Amazon won't strip.</span></div>
+      <div class="row"><span class="num">04</span><span class="txt"><b>Targeted discovery</b> — paid placement to readers who already buy books like this.</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- 5. What is included -->
+<section>
+  <div class="wrap">
+    <p class="eyebrow reveal"><span class="dot"></span>What is included</p>
+    <h2 class="reveal">The Core Launch <i class="ital">System.</i></h2>
+    <div class="cards">
+      <article class="card reveal">
+        <p class="kicker">Listing optimization</p>
+        <h3>Found, then chosen</h3>
+        <p>Keyword + category research plus a rewritten conversion-focused description. Both, because one without the other leaves money on the table.</p>
+      </article>
+      <article class="card reveal">
+        <p class="kicker">Launch reader team</p>
+        <h3>Honest advance readers</h3>
+        <p>A small opt-in advance-reader group, real people given the book early for an honest review, drawn from Dieter's network and the readers of his first two books. No campaign, no pressure.</p>
+        <span class="pill">ToS-safe</span>
+      </article>
+      <article class="card reveal">
+        <p class="kicker">Goodreads presence</p>
+        <h3>Set up properly</h3>
+        <p>Author profile + book page set up properly; quick to do, so included rather than billed separately.</p>
+      </article>
+      <article class="card reveal">
+        <p class="kicker">Author site &amp; email capture</p>
+        <h3>A home base you own</h3>
+        <p>A clean page with buy links and an email signup giving away the sample chapter. The current site presents the books but can't capture a visitor, so everyone leaves without a trace. This sells the next book on day one.</p>
+        <span class="pill">Highest-return asset</span>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- 6. A few things to fix first -->
+<section>
+  <div class="wrap">
+    <p class="eyebrow reveal"><span class="dot"></span>Before a cent goes into promotion</p>
+    <h2 class="reveal">A few things to <i class="ital">fix first.</i></h2>
+    <p class="body reveal">I read the book and cover closely; none of this is big, and it's not a service I'm selling — just the right order, because reviewers flag small errors.</p>
+    <div class="fix-grid">
+      <figure class="cover-fig reveal">
+        <img src="./assets/fabrizio-cover.jpg" width="760" height="1196" alt="The Fabrizio book cover, showing the title, tagline and author name." />
+        <span class="highlight" aria-hidden="true"></span>
+        <figcaption>The tagline sits in the most visible spot on the book. Worth getting exactly right before print.</figcaption>
+      </figure>
+      <div class="fix-lists">
+        <div class="fix-group reveal">
+          <p class="gh">On the cover —</p>
+          <ol>
+            <li><span class="n">01</span><span>Tagline reads <code>a Novel based of true experiences</code> → should be "based on," or stronger, "inspired by true events" (the phrase the market knows).</span></li>
+            <li><span class="n">02</span><span>Author bio has <code>children ,and</code> — stray space before the comma.</span></li>
+          </ol>
+        </div>
+        <div class="fix-group reveal">
+          <p class="gh">Make the brand agree with itself —</p>
+          <ol>
+            <li><span class="n">03</span><span>Pick ONE island spelling — bio says <code>St. Maarten</code>; elsewhere <code>Sint Maarten</code> / <code>St. Martin</code>.</span></li>
+            <li><span class="n">04</span><span>Cover says <code>Majorca</code>, most copy uses <code>Mallorca</code>. Pick one everywhere.</span></li>
+            <li><span class="n">05</span><span>Positioning line differs: cover <code>A Second Chance at Life</code> vs site <code>a fall from grace and path to redemption</code>. Choose one primary tagline.</span></li>
+          </ol>
+        </div>
+        <div class="fix-group reveal">
+          <p class="gh">Inside the book (one proofread pass) —</p>
+          <ol>
+            <li><span class="n">06</span><span><code>Columbia</code> vs <code>Colombia</code>; the name <code>Cristina</code> vs <code>Cristiana</code>; <code>carnegy hall</code> → Carnegie Hall; <code>to much time</code> → too much; plus a few dropped words.</span></li>
+            <li><span class="n">07</span><span>All minor, all fixable in a single edit. Cheap to do, expensive to skip.</span></li>
+          </ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 7. Phase 2 -->
+<section>
+  <div class="wrap">
+    <p class="eyebrow reveal"><span class="dot"></span>Optional, once the listing is live</p>
+    <h2 class="reveal">Phase 2: the growth <i class="ital">engine.</i></h2>
+    <p class="body reveal">Amazon Ads targeting readers of comparable authors, plus a booking on a clean, faith-friendly fiction promo list. Start after launch, advertising a listing we already know converts.</p>
+  </div>
+</section>
+
+<!-- 8. Investment -->
+<section>
+  <div class="wrap">
+    <p class="eyebrow reveal"><span class="dot"></span>Investment</p>
+    <h2 class="reveal">Clear scope. Clear <i class="ital">price.</i></h2>
+    <div class="price reveal">
+      <div class="prow core">
+        <div>
+          <p class="pname">Core Launch System</p>
+          <p class="pdesc">Listing optimization, launch reader team, Goodreads, author site &amp; email capture.</p>
+        </div>
+        <div class="pamt"><div class="amt">€1,200</div><div class="lab">Complete foundation</div></div>
+      </div>
+      <div class="prow">
+        <div>
+          <p class="pname">Phase 2 · Amazon Ads + promo setup</p>
+          <p class="pdesc">Optional, after launch.</p>
+        </div>
+        <div class="pamt"><div class="amt">€400</div><div class="lab">+ ad spend</div></div>
+      </div>
+    </div>
+    <p class="price-note reveal">Figures are a starting point and can be tuned to scope.</p>
+  </div>
+</section>
+
+<!-- 9. One honest note -->
+<section>
+  <div class="wrap">
+    <p class="eyebrow reveal"><span class="dot"></span>One honest note</p>
+    <div class="callout reveal">
+      <p class="kicker">Free of charge</p>
+      <p>Before any promotion, the manuscript and cover need one proofread pass (the items above); fixing them first protects everything spent after; not something I'm charging for — I'd rather tell you now than let a reviewer tell you later.</p>
+    </div>
+  </div>
+</section>
+
+<!-- 10. Close -->
+<section class="close">
+  <div class="wrap">
+    <h2 class="reveal">Fewer promises, <i class="ital">all of them kept.</i></h2>
+    <div class="btn-row reveal">
+      <a class="btn filled" href="./landing/">See the live landing page</a>
+      <a class="btn ghost" href="mailto:hi@jgmetzger.com">Let's talk it through</a>
+    </div>
+    <p class="sig reveal">James</p>
+  </div>
+</section>
+
+<!-- 11. Footer -->
+<footer>
+  <div class="wrap">
+    <span class="wordmark">jgmetzger<span class="p">.</span></span>
+    <span class="ftag">Marketing Strategy · AI &amp; Automation · Mallorca, Spain</span>
+  </div>
+</footer>
+
+<script>
+  (function(){
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); }
+      });
+    }, {threshold:0.12, rootMargin:'0px 0px -8% 0px'});
+
+    var reveals = document.querySelectorAll('.reveal');
+    reveals.forEach(function(el){ io.observe(el); });
+
+    // Stagger the hero on load
+    var hero = document.querySelectorAll('.hero .reveal');
+    hero.forEach(function(el, i){
+      io.unobserve(el);
+      el.style.transitionDelay = (i * 0.09) + 's';
+      requestAnimationFrame(function(){
+        requestAnimationFrame(function(){ el.classList.add('in'); });
+      });
+    });
+  })();
+</script>
 </body>
 </html>
