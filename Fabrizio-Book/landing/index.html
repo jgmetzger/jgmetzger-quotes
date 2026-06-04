@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Fabrizio — A Novel by Dieter Schaede</title>
+<meta name="description" content="Fabrizio, a new novel by Dieter Schaede. A second chance at life — inspired by true events. Coming worldwide 1 December." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600&family=Cormorant+Garamond:ital,wght@1,400;1,500;1,600&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --bg:#07090d; --bg2:#0c1118; --ink:#eef1f4; --muted:#9aa6b2; --faint:#5d6877;
+    --teal:#4fa3c7; --teal-soft:#7cc0db; --teal-glow:rgba(79,163,199,.16);
+    --gold:#d8a24e; --gold-soft:#ecc488; --line:rgba(255,255,255,.09);
+    --disp:'Cinzel',serif; --serif:'Cormorant Garamond',Georgia,serif;
+    --sans:'Inter',sans-serif; --ease:cubic-bezier(0.16,1,0.3,1);
+  }
+
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0; background:var(--bg); color:var(--ink);
+    font-family:var(--sans); font-weight:300; line-height:1.7;
+    -webkit-font-smoothing:antialiased; overflow-x:hidden;
+  }
+  a{color:inherit; text-decoration:none;}
+
+  .wrap{max-width:1120px; margin:0 auto; padding:0 28px;}
+  .eyebrow{font-family:var(--sans); font-weight:400; font-size:12px; letter-spacing:.36em; text-transform:uppercase; color:var(--teal-soft); margin:0 0 1.4rem;}
+
+  .divider{height:1px; border:none; margin:0; background:linear-gradient(90deg, transparent, var(--line), transparent);}
+
+  section{padding:6.5rem 0;}
+
+  h2.disp{font-family:var(--disp); font-weight:500; letter-spacing:.02em; font-size:clamp(28px,4vw,40px); line-height:1.15; margin:0 0 1.6rem;}
+
+  /* Nav */
+  nav{position:fixed; top:0; left:0; right:0; z-index:100; transition:background .4s var(--ease), border-color .4s var(--ease), backdrop-filter .4s var(--ease); border-bottom:1px solid transparent;}
+  nav.scrolled{background:rgba(7,9,13,.72); border-bottom-color:var(--line); backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px);}
+  nav .wrap{display:flex; align-items:center; justify-content:space-between; padding-top:18px; padding-bottom:18px;}
+  .brand{font-family:var(--disp); font-weight:500; font-size:18px; letter-spacing:.28em;}
+  .nav-btn{font-family:var(--sans); font-size:13px; letter-spacing:.08em; padding:.7em 1.4em; border-radius:999px; border:1px solid var(--gold); color:var(--gold-soft); transition:transform .3s var(--ease), background .3s var(--ease), color .3s var(--ease);}
+  .nav-btn:hover{background:var(--gold); color:var(--bg);}
+  .nav-btn:active{transform:scale(.975);}
+
+  /* Hero */
+  .hero{position:relative; min-height:100dvh; display:flex; align-items:center; overflow:hidden;}
+  .hero::before{content:""; position:absolute; top:0; left:0; right:0; height:80%; background:radial-gradient(ellipse 80% 60% at 50% 0%, var(--teal-glow), transparent 70%); pointer-events:none;}
+  .hero::after{content:""; position:absolute; left:0; right:0; bottom:0; height:40%; background:linear-gradient(to bottom, transparent, var(--bg)); pointer-events:none;}
+  .hero .wrap{position:relative; z-index:2; width:100%;}
+  .hero-grid{display:grid; grid-template-columns:.92fr 1.08fr; gap:4rem; align-items:center; padding:7rem 0 5rem;}
+
+  .cover-wrap{perspective:1400px; display:flex; justify-content:center;}
+  .cover{
+    max-width:340px; width:100%; border-radius:8px; display:block;
+    box-shadow:0 40px 80px rgba(0,0,0,.65), 0 0 60px var(--teal-glow);
+    transform:rotateY(-13deg) rotateX(3deg);
+    transition:transform .7s var(--ease);
+  }
+  .cover:hover{transform:rotateY(-6deg) translateY(-4px);}
+
+  .hero-title{font-family:var(--disp); font-weight:600; font-size:clamp(52px,9vw,104px); line-height:1; color:#fff; margin:0 0 1.2rem; letter-spacing:.04em; text-shadow:0 0 38px var(--teal-glow), 0 0 12px rgba(79,163,199,.4);}
+  .hero-tag{font-family:var(--serif); font-style:italic; font-weight:500; font-size:clamp(22px,3vw,30px); color:var(--gold-soft); margin:0 0 1.4rem;}
+  .hero-by{font-family:var(--sans); font-size:12px; letter-spacing:.22em; text-transform:uppercase; color:var(--muted); margin:0 0 2.6rem;}
+  .hero-btns{display:flex; gap:1rem; flex-wrap:wrap;}
+
+  .btn{font-family:var(--sans); font-weight:400; font-size:14px; letter-spacing:.04em; padding:.95em 1.9em; border-radius:999px; cursor:pointer; border:1px solid transparent; display:inline-flex; align-items:center; transition:transform .3s var(--ease), background .3s var(--ease), border-color .3s var(--ease), color .3s var(--ease);}
+  .btn:active{transform:scale(.975);}
+  .btn.gold{background:var(--gold); color:var(--bg); border-color:var(--gold);}
+  .btn.gold:hover{background:var(--gold-soft); border-color:var(--gold-soft);}
+  .btn.ghost{background:transparent; color:var(--ink); border-color:var(--line);}
+  .btn.ghost:hover{border-color:var(--teal); color:var(--teal-soft);}
+
+  /* Synopsis */
+  .synopsis{text-align:center;}
+  .synopsis .wrap{max-width:760px;}
+  .syn-lead{font-family:var(--serif); font-weight:400; font-size:clamp(24px,3.2vw,33px); line-height:1.4; color:var(--ink); margin:0 0 2rem;}
+  .syn-lead em{font-style:italic; color:var(--gold-soft);}
+  .syn-body{color:var(--muted); font-size:17px; margin:0 0 2.4rem;}
+  .syn-pull{font-family:var(--serif); font-style:italic; font-weight:500; font-size:clamp(20px,2.6vw,26px); line-height:1.5; color:var(--teal-soft); margin:0;}
+
+  /* Email capture */
+  .capture{position:relative; overflow:hidden;}
+  .capture::before{content:""; position:absolute; inset:0; background:radial-gradient(ellipse 60% 70% at 50% 40%, var(--teal-glow), transparent 70%); pointer-events:none;}
+  .capture .wrap{position:relative; z-index:2; max-width:620px;}
+  .glass{
+    border:1px solid var(--line); border-radius:18px; padding:3rem 2.6rem; text-align:center;
+    background:linear-gradient(160deg, rgba(255,255,255,.05), rgba(255,255,255,.01));
+    backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px);
+  }
+  .glass h2{margin-bottom:1rem;}
+  .glass p{color:var(--muted); margin:0 auto 1.6rem; max-width:42ch;}
+  .free-pill{display:inline-block; font-family:var(--sans); font-size:11px; letter-spacing:.16em; text-transform:uppercase; color:var(--gold-soft); border:1px solid var(--gold); border-radius:999px; padding:.4em 1em; margin-bottom:2rem;}
+  .cap-form{display:flex; gap:.7rem; flex-wrap:wrap; justify-content:center;}
+  .cap-form input{
+    flex:1 1 240px; min-width:0; font-family:var(--sans); font-size:15px; color:var(--ink);
+    background:rgba(255,255,255,.04); border:1px solid var(--line); border-radius:999px; padding:.9em 1.4em;
+    transition:border-color .3s var(--ease);
+  }
+  .cap-form input::placeholder{color:var(--faint);}
+  .cap-form input:focus{outline:none; border-color:var(--teal);}
+  .cap-form input:disabled{opacity:.55;}
+  .cap-msg{min-height:1.4em; margin:1.2rem 0 0; font-size:15px;}
+  .cap-msg.error{color:var(--gold-soft);}
+  .cap-msg.ok{font-family:var(--serif); font-style:italic; font-size:18px; color:var(--teal-soft);}
+
+  /* Author */
+  .author-grid{display:grid; grid-template-columns:200px 1fr; gap:3rem; align-items:start;}
+  .author-grid img{width:200px; height:auto; border-radius:12px; box-shadow:0 24px 50px rgba(0,0,0,.55); display:block;}
+  .author-grid p{color:var(--muted); font-size:16px;}
+  .author-grid p + p{margin-top:1.2rem;}
+
+  /* More books */
+  .more{text-align:center;}
+  .more .eyebrow{display:block;}
+  .book-cards{display:grid; grid-template-columns:repeat(3,1fr); gap:1.4rem; margin-top:2.6rem; text-align:left;}
+  .book-card{border:1px solid var(--line); border-radius:14px; padding:1.8rem; background:linear-gradient(160deg, var(--bg2), rgba(12,17,24,.3)); transition:transform .4s var(--ease), border-color .4s var(--ease);}
+  .book-card:hover{transform:translateY(-3px); border-color:var(--teal);}
+  .book-card .yr{font-family:var(--sans); font-size:11px; letter-spacing:.18em; text-transform:uppercase; color:var(--teal-soft); margin:0 0 .8rem;}
+  .book-card h3{font-family:var(--disp); font-weight:500; font-size:20px; margin:0 0 .7rem;}
+  .book-card p{color:var(--muted); font-size:14px; margin:0;}
+
+  /* Footer */
+  footer{border-top:1px solid var(--line); padding:3.5rem 0; text-align:center;}
+  footer .brand{display:block; margin-bottom:.8rem;}
+  footer .fcopy{font-family:var(--sans); font-size:12px; letter-spacing:.1em; color:var(--faint);}
+
+  /* Reveal */
+  .reveal{opacity:0; transform:translateY(24px); transition:opacity .8s var(--ease), transform .8s var(--ease);}
+  .reveal.in{opacity:1; transform:none;}
+
+  @media (max-width:880px){
+    .hero-grid{grid-template-columns:1fr; gap:2.6rem; text-align:center; padding-top:6rem;}
+    .cover{transform:none; max-width:260px;}
+    .cover:hover{transform:translateY(-4px);}
+    .hero-btns{justify-content:center;}
+    .author-grid{grid-template-columns:1fr; gap:2rem; justify-items:center; text-align:center;}
+    .book-cards{grid-template-columns:1fr;}
+  }
+  @media (prefers-reduced-motion:reduce){
+    .reveal{opacity:1; transform:none; transition:none;}
+    .cover{transition:none;}
+    html{scroll-behavior:auto;}
+  }
+</style>
+</head>
+<body>
+
+<nav id="nav" aria-label="Primary">
+  <div class="wrap">
+    <span class="brand">FABRIZIO</span>
+    <a class="nav-btn" href="#buy">Get the Book</a>
+  </div>
+</nav>
+
+<!-- 2. Hero -->
+<header class="hero">
+  <div class="wrap">
+    <div class="hero-grid">
+      <div class="cover-wrap reveal">
+        <img class="cover" src="../assets/fabrizio-cover.jpg" width="760" height="1196" alt="Cover of the novel Fabrizio by Dieter Schaede, with a glowing cross of light over a dark teal background." />
+      </div>
+      <div>
+        <p class="eyebrow reveal">A New Novel · Coming Worldwide 1 December</p>
+        <h1 class="hero-title reveal">FABRIZIO</h1>
+        <p class="hero-tag reveal">A Second Chance at Life</p>
+        <p class="hero-by reveal">A Novel by Dieter Schaede · Inspired by true events</p>
+        <div class="hero-btns reveal">
+          <a class="btn gold" href="#buy">Get it on Amazon</a>
+          <a class="btn ghost" href="#chapter">Read chapter one free</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<hr class="divider" />
+
+<!-- 3. Synopsis -->
+<section class="synopsis">
+  <div class="wrap">
+    <p class="eyebrow reveal">The Story</p>
+    <p class="syn-lead reveal">Lightning may never strike twice. But for the House of Fabrizio, success was a blessing that <em>spanned four generations.</em></p>
+    <p class="syn-body reveal">An ambassador, a fashion designer and a musical prodigy carry one family to fame and fortune beyond imagining. But jealousy and suspicion are never far behind success, and kidnapping, heartbreak and addiction threaten to bring the whole house of cards crumbling down.</p>
+    <p class="syn-pull reveal">Only by the grace of God could the family line be redeemed — and only by a humble heart could they discover the true riches that bring life, love and fulfilment.</p>
+  </div>
+</section>
+
+<hr class="divider" />
+
+<!-- 4. Email capture -->
+<section class="capture" id="chapter">
+  <div class="wrap">
+    <div class="glass reveal">
+      <span class="free-pill">Free · The first chapter</span>
+      <h2 class="disp">Begin the story tonight</h2>
+      <p>Enter your email and the opening chapter of Fabrizio is yours, free, before launch day.</p>
+      <form class="cap-form" id="capForm" novalidate>
+        <label for="capEmail" class="sr-only" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);">Email address</label>
+        <input type="email" id="capEmail" name="email" placeholder="you@example.com" autocomplete="email" aria-label="Email address" />
+        <button type="submit" class="btn gold" id="capBtn">Send me chapter one</button>
+      </form>
+      <p class="cap-msg" id="capMsg" role="status" aria-live="polite"></p>
+    </div>
+  </div>
+</section>
+
+<hr class="divider" />
+
+<!-- 5. Author -->
+<section>
+  <div class="wrap">
+    <div class="author-grid">
+      <img class="reveal" src="../assets/author.jpg" width="300" height="372" alt="Portrait of author Dieter Schaede." />
+      <div>
+        <p class="eyebrow reveal">The Author</p>
+        <h2 class="disp reveal">Dieter Schaede</h2>
+        <p class="reveal">Grew up in war-torn Germany, left at eighteen for North America, made his name in fashion design and business before selling up to travel the world; settled on his favourite Caribbean island, St. Maarten, and founded a successful real estate company.</p>
+        <p class="reveal">He and his wife Marisol raised five children and now divide their time between the Caribbean and the island of Mallorca, Spain; his life today is devoted to writing. Fabrizio is his third novel.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider" />
+
+<!-- 6. More from Dieter Schaede -->
+<section class="more">
+  <div class="wrap">
+    <p class="eyebrow reveal">More from Dieter Schaede</p>
+    <div class="book-cards">
+      <article class="book-card reveal">
+        <p class="yr">2022</p>
+        <h3>The Great Deception</h3>
+        <p>The thrilling debut novel.</p>
+      </article>
+      <article class="book-card reveal">
+        <p class="yr">2023</p>
+        <h3>The Sanctuary</h3>
+        <p>The exciting follow-up.</p>
+      </article>
+      <article class="book-card reveal">
+        <p class="yr">Coming next</p>
+        <h3>The Photographer</h3>
+        <p>A world-spanning thriller.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- 7. Footer -->
+<footer id="buy">
+  <div class="wrap">
+    <span class="brand">FABRIZIO</span>
+    <span class="fcopy">© Dieter Schaede · dieterschaede.com</span>
+  </div>
+</footer>
+
+<script>
+  (function(){
+    // Nav scroll state
+    var nav = document.getElementById('nav');
+    function onScroll(){
+      if(window.scrollY > 30){ nav.classList.add('scrolled'); }
+      else{ nav.classList.remove('scrolled'); }
+    }
+    onScroll();
+    window.addEventListener('scroll', onScroll, {passive:true});
+
+    // Scroll reveals
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); }
+      });
+    }, {threshold:0.12, rootMargin:'0px 0px -8% 0px'});
+    document.querySelectorAll('.reveal').forEach(function(el){ io.observe(el); });
+
+    // Stagger the hero on load
+    document.querySelectorAll('.hero .reveal').forEach(function(el, i){
+      io.unobserve(el);
+      el.style.transitionDelay = (i * 0.09) + 's';
+      requestAnimationFrame(function(){
+        requestAnimationFrame(function(){ el.classList.add('in'); });
+      });
+    });
+
+    // Email capture — in-memory only, no storage, no backend
+    var form = document.getElementById('capForm');
+    var input = document.getElementById('capEmail');
+    var btn = document.getElementById('capBtn');
+    var msg = document.getElementById('capMsg');
+    var re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    form.addEventListener('submit', function(ev){
+      ev.preventDefault();
+      var val = input.value.trim();
+      if(!re.test(val)){
+        msg.className = 'cap-msg error';
+        msg.textContent = 'Please enter a valid email address.';
+        input.focus();
+        return;
+      }
+      msg.className = 'cap-msg ok';
+      msg.textContent = 'Wonderful. Chapter one is on its way to your inbox.';
+      input.value = '';
+      input.disabled = true;
+      btn.disabled = true;
+      btn.textContent = 'Sent';
+    });
+  })();
+</script>
+</body>
+</html>

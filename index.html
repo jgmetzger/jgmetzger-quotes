@@ -1,1 +1,141 @@
-<p>hello world</p>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex, nofollow" />
+  <title>jgmetzger. — proposals</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@1,400;1,500&family=JetBrains+Mono:wght@400;500&family=Outfit:wght@300;400;500;600&display=swap"
+    rel="stylesheet"
+  />
+  <style>
+    :root {
+      --bg: #0a0a0b;
+      --text: #f2f0ed;
+      --accent: #7c5cfc;
+      --muted: rgba(242, 240, 237, 0.55);
+      --line: rgba(242, 240, 237, 0.12);
+      --sans: "Outfit", system-ui, -apple-system, sans-serif;
+      --serif: "Cormorant Garamond", Georgia, serif;
+      --mono: "JetBrains Mono", ui-monospace, monospace;
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body { height: 100%; }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--sans);
+      font-weight: 300;
+      -webkit-font-smoothing: antialiased;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+    }
+
+    main {
+      width: 100%;
+      max-width: 640px;
+    }
+
+    .wordmark {
+      font-family: var(--sans);
+      font-weight: 600;
+      font-size: clamp(2.5rem, 8vw, 4rem);
+      letter-spacing: -0.03em;
+      margin: 0;
+      line-height: 1;
+    }
+
+    .wordmark .dot { color: var(--accent); }
+
+    .tagline {
+      font-family: var(--serif);
+      font-style: italic;
+      font-size: clamp(1.25rem, 3vw, 1.6rem);
+      color: var(--muted);
+      margin: 1rem 0 0;
+    }
+
+    .label {
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin: 3.5rem 0 1.25rem;
+    }
+
+    ul.proposals {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      border-top: 1px solid var(--line);
+    }
+
+    ul.proposals li { border-bottom: 1px solid var(--line); }
+
+    ul.proposals a {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 1rem;
+      padding: 1.1rem 0.25rem;
+      color: var(--text);
+      text-decoration: none;
+      font-size: 1.15rem;
+      transition: color 0.18s ease, padding-left 0.18s ease;
+    }
+
+    ul.proposals a:hover,
+    ul.proposals a:focus-visible {
+      color: var(--accent);
+      padding-left: 0.6rem;
+      outline: none;
+    }
+
+    ul.proposals .meta {
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      white-space: nowrap;
+    }
+
+    footer {
+      margin-top: 4rem;
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      letter-spacing: 0.1em;
+      color: var(--muted);
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <h1 class="wordmark">jgmetzger<span class="dot">.</span></h1>
+    <p class="tagline">Proposals &amp; live demos.</p>
+
+    <p class="label">Active proposals</p>
+    <ul class="proposals">
+      <li>
+        <a href="./Fabrizio-Book/">
+          <span>Fabrizio — Book Launch System</span>
+          <span class="meta">View →</span>
+        </a>
+      </li>
+    </ul>
+
+    <footer>© jgmetzger.</footer>
+  </main>
+</body>
+</html>
