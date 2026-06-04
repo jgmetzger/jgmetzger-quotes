@@ -69,6 +69,16 @@
     box-shadow:0 0 1px rgba(0,0,0,.5);
     backface-visibility:hidden;
   }
+  /* lighting overlay on the front cover for depth */
+  .book-sheen{
+    position:absolute; top:0; left:0; width:100%; height:100%;
+    transform:translateZ(calc(var(--thick) / 2 + 0.2px));
+    border-radius:3px 7px 7px 3px; pointer-events:none;
+    background:
+      linear-gradient(105deg, rgba(255,255,255,.22) 0%, rgba(255,255,255,.06) 14%, rgba(255,255,255,0) 34%),
+      linear-gradient(90deg, rgba(0,0,0,.34) 0%, rgba(0,0,0,.12) 5%, rgba(0,0,0,0) 13%),
+      linear-gradient(270deg, rgba(255,255,255,.14) 0%, rgba(255,255,255,0) 4%);
+  }
   /* page block (right edge) */
   .book-pages{
     position:absolute; top:5px; bottom:5px; right:calc(var(--thick) / -2);
@@ -213,6 +223,7 @@
           <span class="book-back" aria-hidden="true"></span>
           <span class="book-pages" aria-hidden="true"></span>
           <img class="cover" src="../assets/fabrizio-cover.jpg" width="760" height="1196" alt="The novel Fabrizio by Dieter Schaede, shown as a book — a glowing cross of light over a dark teal background." />
+          <span class="book-sheen" aria-hidden="true"></span>
         </div>
       </div>
       <div>
