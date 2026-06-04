@@ -79,6 +79,16 @@
       linear-gradient(90deg, rgba(0,0,0,.34) 0%, rgba(0,0,0,.12) 5%, rgba(0,0,0,0) 13%),
       linear-gradient(270deg, rgba(255,255,255,.14) 0%, rgba(255,255,255,0) 4%);
   }
+  /* cursor-tracking glare (set --gx/--gy from JS) */
+  .book-glare{
+    position:absolute; top:0; left:0; width:100%; height:100%;
+    transform:translateZ(calc(var(--thick) / 2 + 0.3px));
+    border-radius:3px 7px 7px 3px; pointer-events:none;
+    background:radial-gradient(circle at var(--gx, 30%) var(--gy, 18%),
+      rgba(255,255,255,.4), rgba(255,255,255,.1) 20%, transparent 52%);
+    mix-blend-mode:soft-light; opacity:0; transition:opacity .35s ease;
+  }
+  .book3d:hover .book-glare{opacity:1;}
   /* page block (right edge) */
   .book-pages{
     position:absolute; top:5px; bottom:5px; right:calc(var(--thick) / -2);
@@ -224,6 +234,7 @@
           <span class="book-pages" aria-hidden="true"></span>
           <img class="cover" src="../assets/fabrizio-cover.jpg" width="760" height="1196" alt="The novel Fabrizio by Dieter Schaede, shown as a book — a glowing cross of light over a dark teal background." />
           <span class="book-sheen" aria-hidden="true"></span>
+          <span class="book-glare" aria-hidden="true"></span>
         </div>
       </div>
       <div>
@@ -389,6 +400,38 @@
       btn.disabled = true;
       btn.textContent = 'Sent';
     });
+
+    // Hero 3D book — tilt + glare follow the cursor (hover devices only)
+    var book = document.querySelector('.book3d');
+    var canHover = window.matchMedia('(hover: hover)').matches;
+    var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (book && canHover && !reduce) {
+      var raf = null, nx = 0, ny = 0;
+      function applyTilt() {
+        raf = null;
+        var ry = -18 + nx * 18;   // turn left/right with cursor
+        var rx = 3 - ny * 14;     // pitch up/down with cursor
+        book.style.transform = 'rotateY(' + ry + 'deg) rotateX(' + rx + 'deg) translateY(-6px)';
+        book.style.setProperty('--gx', ((nx + 0.5) * 100).toFixed(1) + '%');
+        book.style.setProperty('--gy', ((ny + 0.5) * 100).toFixed(1) + '%');
+      }
+      book.addEventListener('pointerenter', function () {
+        book.style.transition = 'transform .18s ease-out';
+      });
+      book.addEventListener('pointermove', function (e) {
+        var r = book.getBoundingClientRect();
+        nx = (e.clientX - r.left) / r.width - 0.5;
+        ny = (e.clientY - r.top) / r.height - 0.5;
+        if (!raf) raf = requestAnimationFrame(applyTilt);
+      });
+      book.addEventListener('pointerleave', function () {
+        if (raf) { cancelAnimationFrame(raf); raf = null; }
+        book.style.transition = '';      // ease back via the CSS .8s transition
+        book.style.transform = '';       // return to the resting tilt
+        book.style.removeProperty('--gx');
+        book.style.removeProperty('--gy');
+      });
+    }
   })();
 </script>
 </body>
