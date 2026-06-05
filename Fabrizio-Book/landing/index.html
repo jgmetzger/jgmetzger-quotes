@@ -226,10 +226,46 @@
     .author-grid{grid-template-columns:1fr; gap:2rem; justify-items:center; text-align:center;}
     .book-cards{grid-template-columns:1fr;}
   }
+  /* Purchase popup */
+  .buy-modal{
+    position:fixed; inset:0; z-index:200; display:flex; align-items:center; justify-content:center;
+    padding:1.5rem; opacity:0; visibility:hidden; transition:opacity .3s var(--ease), visibility .3s var(--ease);
+  }
+  .buy-modal.open{opacity:1; visibility:visible;}
+  .buy-modal__backdrop{position:absolute; inset:0; background:rgba(3,5,8,.72); backdrop-filter:blur(6px); -webkit-backdrop-filter:blur(6px);}
+  .buy-modal__card{
+    position:relative; width:100%; max-width:440px; text-align:center;
+    border:1px solid var(--line); border-radius:18px; padding:2.6rem 2.2rem 2.2rem;
+    background:linear-gradient(160deg, #0e151d, #0a0e14);
+    box-shadow:0 30px 80px rgba(0,0,0,.6), 0 0 70px var(--teal-glow);
+    transform:translateY(14px) scale(.98); transition:transform .35s var(--ease);
+  }
+  .buy-modal.open .buy-modal__card{transform:none;}
+  .buy-modal__close{
+    position:absolute; top:.8rem; right:.9rem; width:34px; height:34px; border:none; cursor:pointer;
+    background:transparent; color:var(--muted); font-size:22px; line-height:1; border-radius:50%;
+    transition:color .2s var(--ease), background .2s var(--ease);
+  }
+  .buy-modal__close:hover{color:var(--ink); background:rgba(255,255,255,.06);}
+  .buy-modal__pill{
+    display:inline-block; font-family:var(--sans); font-size:11px; letter-spacing:.16em; text-transform:uppercase;
+    color:var(--gold-soft); border:1px solid var(--gold); border-radius:999px; padding:.4em 1em; margin-bottom:1.4rem;
+  }
+  .buy-modal h2{font-family:var(--disp); font-weight:500; font-size:26px; margin:0 0 1rem; letter-spacing:.02em;}
+  .buy-modal p{color:var(--muted); font-size:15px; line-height:1.65; margin:0 auto 1.8rem; max-width:34ch;}
+  .buy-modal__actions{display:flex; flex-direction:column; gap:.8rem;}
+  .buy-modal .btn{justify-content:center;}
+  .buy-modal__secondary{
+    background:transparent; border:none; cursor:pointer; color:var(--teal-soft);
+    font-family:var(--sans); font-size:13px; letter-spacing:.02em; padding:.4em; transition:color .2s var(--ease);
+  }
+  .buy-modal__secondary:hover{color:var(--teal);}
   @media (prefers-reduced-motion:reduce){
     .reveal{opacity:1; transform:none; transition:none;}
     .book3d{transition:none;}
     html{scroll-behavior:auto;}
+    .buy-modal, .buy-modal__card{transition:opacity .2s linear;}
+    .buy-modal__card{transform:none;}
   }
 </style>
 </head>
@@ -238,7 +274,7 @@
 <nav id="nav" aria-label="Primary">
   <div class="wrap">
     <span class="brand">FABRIZIO</span>
-    <a class="nav-btn" href="#buy">Get the Book</a>
+    <a class="nav-btn buy-cta" href="#buy">Get the Book</a>
   </div>
 </nav>
 
@@ -261,7 +297,7 @@
         <p class="hero-tag reveal">A Second Chance at Life</p>
         <p class="hero-by reveal">A Novel by Dieter Schaede · Inspired by true events</p>
         <div class="hero-btns reveal">
-          <a class="btn gold" href="#buy">Get it on Amazon</a>
+          <a class="btn gold buy-cta" href="#buy">Get it on Amazon</a>
           <a class="btn ghost" href="#chapter">Read chapter one free</a>
         </div>
       </div>
@@ -367,6 +403,20 @@
   </div>
 </footer>
 
+<!-- Demo explainer popup -->
+<div class="buy-modal" id="demoModal" role="dialog" aria-modal="true" aria-labelledby="demoModalTitle" aria-hidden="true">
+  <div class="buy-modal__backdrop" data-close></div>
+  <div class="buy-modal__card">
+    <button class="buy-modal__close" type="button" data-close aria-label="Close">&times;</button>
+    <span class="buy-modal__pill">Demo preview</span>
+    <h2 id="demoModalTitle"></h2>
+    <p id="demoModalBody"></p>
+    <div class="buy-modal__actions">
+      <button class="btn gold buy-modal__ok" type="button" data-close>Got it</button>
+    </div>
+  </div>
+</div>
+
 <script>
   (function(){
     // Nav scroll state
@@ -411,12 +461,8 @@
         input.focus();
         return;
       }
-      msg.className = 'cap-msg ok';
-      msg.textContent = 'Wonderful. Chapter one is on its way to your inbox.';
-      input.value = '';
-      input.disabled = true;
-      btn.disabled = true;
-      btn.textContent = 'Sent';
+      msg.textContent = '';
+      openDemo('chapter');   // demo: explain what this would do in production
     });
 
     // Hero 3D book — tilt + glare follow the cursor (hover devices only)
@@ -451,6 +497,56 @@
         book.style.removeProperty('--shine');
       });
     }
+
+  })();
+
+  // Demo explainer popup — describes what each CTA would do in the live site
+  function openDemo(){}   // hoisted placeholder, real impl assigned below
+  (function(){
+    var modal = document.getElementById('demoModal');
+    if (!modal) return;
+    var titleEl = document.getElementById('demoModalTitle');
+    var bodyEl = document.getElementById('demoModalBody');
+    var lastFocus = null;
+
+    var content = {
+      amazon: {
+        title: 'Buy on Amazon',
+        body: 'On the live site, this button sends the reader straight to Fabrizio’s purchase page on Amazon. This is a demo, so it doesn’t link out yet.'
+      },
+      chapter: {
+        title: 'Free first chapter',
+        body: 'On the live site, submitting this form triggers an automated email sequence that delivers the opening chapter, and adds the reader to your launch list so every signup is tracked. This is a demo — no email is actually sent.'
+      }
+    };
+
+    openDemo = function (key) {
+      var c = content[key] || content.amazon;
+      titleEl.textContent = c.title;
+      bodyEl.textContent = c.body;
+      lastFocus = document.activeElement;
+      modal.classList.add('open');
+      modal.setAttribute('aria-hidden', 'false');
+      document.body.style.overflow = 'hidden';
+      var ok = modal.querySelector('.buy-modal__ok');
+      if (ok) ok.focus();
+    };
+    function closeDemo() {
+      modal.classList.remove('open');
+      modal.setAttribute('aria-hidden', 'true');
+      document.body.style.overflow = '';
+      if (lastFocus && lastFocus.focus) lastFocus.focus();
+    }
+
+    Array.prototype.forEach.call(document.querySelectorAll('.buy-cta'), function (el) {
+      el.addEventListener('click', function (e) { e.preventDefault(); openDemo('amazon'); });
+    });
+    Array.prototype.forEach.call(modal.querySelectorAll('[data-close]'), function (el) {
+      el.addEventListener('click', closeDemo);
+    });
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && modal.classList.contains('open')) closeDemo();
+    });
   })();
 </script>
 </body>
