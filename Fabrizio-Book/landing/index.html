@@ -403,17 +403,16 @@
   </div>
 </footer>
 
-<!-- Purchase popup -->
-<div class="buy-modal" id="buyModal" role="dialog" aria-modal="true" aria-labelledby="buyModalTitle" aria-hidden="true">
+<!-- Demo explainer popup -->
+<div class="buy-modal" id="demoModal" role="dialog" aria-modal="true" aria-labelledby="demoModalTitle" aria-hidden="true">
   <div class="buy-modal__backdrop" data-close></div>
   <div class="buy-modal__card">
     <button class="buy-modal__close" type="button" data-close aria-label="Close">&times;</button>
-    <span class="buy-modal__pill">Coming 1 December</span>
-    <h2 id="buyModalTitle">Get Fabrizio on Amazon</h2>
-    <p>This will take you to Fabrizio&rsquo;s page on Amazon, where you can complete your purchase. The book launches worldwide on 1 December &mdash; until then, you can start reading the opening chapter for free.</p>
+    <span class="buy-modal__pill">Demo preview</span>
+    <h2 id="demoModalTitle"></h2>
+    <p id="demoModalBody"></p>
     <div class="buy-modal__actions">
-      <a class="btn gold" id="buyModalLink" href="#" target="_blank" rel="noopener noreferrer">Continue to Amazon &rarr;</a>
-      <button class="buy-modal__secondary" type="button" data-chapter>Read the first chapter free instead</button>
+      <button class="btn gold buy-modal__ok" type="button" data-close>Got it</button>
     </div>
   </div>
 </div>
@@ -462,12 +461,8 @@
         input.focus();
         return;
       }
-      msg.className = 'cap-msg ok';
-      msg.textContent = 'Wonderful. Chapter one is on its way to your inbox.';
-      input.value = '';
-      input.disabled = true;
-      btn.disabled = true;
-      btn.textContent = 'Sent';
+      msg.textContent = '';
+      openDemo('chapter');   // demo: explain what this would do in production
     });
 
     // Hero 3D book — tilt + glare follow the cursor (hover devices only)
@@ -503,44 +498,55 @@
       });
     }
 
-    // Purchase popup — intercept the buy CTAs and confirm before going to Amazon
-    var modal = document.getElementById('buyModal');
-    if (modal) {
-      var lastFocus = null;
-      function openModal(e) {
-        if (e) e.preventDefault();
-        lastFocus = document.activeElement;
-        modal.classList.add('open');
-        modal.setAttribute('aria-hidden', 'false');
-        document.body.style.overflow = 'hidden';
-        var link = document.getElementById('buyModalLink');
-        if (link) link.focus();
+  })();
+
+  // Demo explainer popup — describes what each CTA would do in the live site
+  function openDemo(){}   // hoisted placeholder, real impl assigned below
+  (function(){
+    var modal = document.getElementById('demoModal');
+    if (!modal) return;
+    var titleEl = document.getElementById('demoModalTitle');
+    var bodyEl = document.getElementById('demoModalBody');
+    var lastFocus = null;
+
+    var content = {
+      amazon: {
+        title: 'Buy on Amazon',
+        body: 'On the live site, this button sends the reader straight to Fabrizio’s purchase page on Amazon. This is a demo, so it doesn’t link out yet.'
+      },
+      chapter: {
+        title: 'Free first chapter',
+        body: 'On the live site, submitting this form triggers an automated email sequence that delivers the opening chapter, and adds the reader to your launch list so every signup is tracked. This is a demo — no email is actually sent.'
       }
-      function closeModal() {
-        modal.classList.remove('open');
-        modal.setAttribute('aria-hidden', 'true');
-        document.body.style.overflow = '';
-        if (lastFocus && lastFocus.focus) lastFocus.focus();
-      }
-      Array.prototype.forEach.call(document.querySelectorAll('.buy-cta'), function (el) {
-        el.addEventListener('click', openModal);
-      });
-      Array.prototype.forEach.call(modal.querySelectorAll('[data-close]'), function (el) {
-        el.addEventListener('click', closeModal);
-      });
-      // "read the chapter free instead" — close and jump to the email form
-      var chapBtn = modal.querySelector('[data-chapter]');
-      if (chapBtn) {
-        chapBtn.addEventListener('click', function () {
-          closeModal();
-          var target = document.getElementById('chapter');
-          if (target) target.scrollIntoView({ behavior: 'smooth' });
-        });
-      }
-      document.addEventListener('keydown', function (e) {
-        if (e.key === 'Escape' && modal.classList.contains('open')) closeModal();
-      });
+    };
+
+    openDemo = function (key) {
+      var c = content[key] || content.amazon;
+      titleEl.textContent = c.title;
+      bodyEl.textContent = c.body;
+      lastFocus = document.activeElement;
+      modal.classList.add('open');
+      modal.setAttribute('aria-hidden', 'false');
+      document.body.style.overflow = 'hidden';
+      var ok = modal.querySelector('.buy-modal__ok');
+      if (ok) ok.focus();
+    };
+    function closeDemo() {
+      modal.classList.remove('open');
+      modal.setAttribute('aria-hidden', 'true');
+      document.body.style.overflow = '';
+      if (lastFocus && lastFocus.focus) lastFocus.focus();
     }
+
+    Array.prototype.forEach.call(document.querySelectorAll('.buy-cta'), function (el) {
+      el.addEventListener('click', function (e) { e.preventDefault(); openDemo('amazon'); });
+    });
+    Array.prototype.forEach.call(modal.querySelectorAll('[data-close]'), function (el) {
+      el.addEventListener('click', closeDemo);
+    });
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && modal.classList.contains('open')) closeDemo();
+    });
   })();
 </script>
 </body>
