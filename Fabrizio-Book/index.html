@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <meta name="robots" content="noindex, nofollow" />
 <title>A launch system for Fabrizio · jgmetzger.</title>
-<meta name="description" content="Book launch proposal for Fabrizio — prepared by James Metzger, jgmetzger." />
+<meta name="description" content="Book launch proposal for Fabrizio, prepared by jgmetzger." />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@1,400;1,500;1,600&family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
@@ -36,6 +36,8 @@
   a{color:inherit;}
 
   .ital{font-family:var(--serif); font-style:italic; font-weight:500; font-size:1.12em;}
+  .hl{color:var(--purple-light);}
+  .fix-group li .suggest{color:var(--purple-light);}
 
   .eyebrow{
     font-family:var(--mono); font-size:11px; font-weight:500;
@@ -118,7 +120,7 @@
   /* Fix-first grid */
   .fix-grid{display:grid; grid-template-columns:300px 1fr; gap:3rem; margin-top:2.6rem; align-items:start;}
   .cover-fig{margin:0; position:relative;}
-  .cover-fig img{width:100%; border-radius:10px; box-shadow:0 30px 70px rgba(0,0,0,.6); display:block;}
+  .cover-fig img{width:100%; height:auto; aspect-ratio:760 / 1196; border-radius:10px; box-shadow:0 30px 70px rgba(0,0,0,.6); display:block;}
   .cover-fig .highlight{
     position:absolute; left:8%; right:8%; bottom:9%; height:13%;
     border:1.5px solid var(--purple); border-radius:5px;
@@ -152,6 +154,11 @@
   /* Close */
   .close{text-align:center;}
   .close h2{max-width:none;}
+  .close-feature{margin:2.6rem auto 0; max-width:600px;}
+  .close-lead{color:var(--g6); font-size:clamp(16px,1.7vw,18px); margin:0 0 1.8rem;}
+  .close-talk{margin-top:3.5rem; padding-top:2.6rem; border-top:1px solid var(--g1);
+    display:flex; flex-direction:column; align-items:center; gap:1.1rem;}
+  .close-talk p{color:var(--g5); font-size:15px; margin:0;}
   .btn-row{display:flex; gap:1rem; justify-content:center; flex-wrap:wrap; margin:2.4rem 0 3rem;}
   .btn{
     display:inline-flex; align-items:center; justify-content:center;
@@ -208,7 +215,7 @@
     <p class="lede reveal">Not a list of setup tasks. A system that gets the book found, turns the click into a sale, and builds Dieter an audience he owns, ready and waiting for the next book.</p>
     <div class="meta-row reveal">
       <div class="meta-item"><p class="k">Prepared for</p><p class="v">Dieter Schaede</p></div>
-      <div class="meta-item"><p class="k">Prepared by</p><p class="v">James Metzger · jgmetzger.</p></div>
+      <div class="meta-item"><p class="k">Prepared by</p><p class="v">jgmetzger.</p></div>
       <div class="meta-item"><p class="k">Re</p><p class="v">Fabrizio · Worldwide launch</p></div>
     </div>
   </div>
@@ -219,7 +226,7 @@
   <div class="wrap">
     <p class="eyebrow reveal"><span class="dot"></span>The core idea</p>
     <h2 class="reveal">Most pre-launch work stops at <i class="ital">setup.</i></h2>
-    <p class="body reveal">Keywords, a Goodreads page, a few early readers are plumbing; they don't answer the two questions that sell books — where do you send interested people, and how do you keep them so they buy the next book. So this is a system, not a task list, already half-built thanks to the backlist and the sequel on the site.</p>
+    <p class="body reveal">Keywords, a Goodreads page, a few early readers are plumbing; they don't answer the two questions that sell books: where do you send interested people, and how do you keep them so they buy the next book. So this is a system, not a task list, already half-built thanks to the backlist and the sequel on the site.</p>
   </div>
 </section>
 
@@ -229,10 +236,10 @@
     <p class="eyebrow reveal"><span class="dot"></span>What actually moves the needle</p>
     <h2 class="reveal">The honest order of <i class="ital">impact.</i></h2>
     <div class="impact reveal">
-      <div class="row"><span class="num">01</span><span class="txt"><b>A listing that converts</b> — the description is what turns a browser into a buyer.</span></div>
-      <div class="row"><span class="num">02</span><span class="txt"><b>A home base you own</b> — a page with email signup; one-week launch vs compounding audience.</span></div>
-      <div class="row"><span class="num">03</span><span class="txt"><b>Honest early reviews</b> — a small opt-in reader group; reviews Amazon won't strip.</span></div>
-      <div class="row"><span class="num">04</span><span class="txt"><b>Targeted discovery</b> — paid placement to readers who already buy books like this.</span></div>
+      <div class="row"><span class="num">01</span><span class="txt"><b>A listing that converts:</b> the description is what turns a browser into a buyer.</span></div>
+      <div class="row"><span class="num">02</span><span class="txt"><b>A home base you own:</b> a page with email signup; one-week launch vs compounding audience.</span></div>
+      <div class="row"><span class="num">03</span><span class="txt"><b>Honest early reviews:</b> a small opt-in reader group; reviews Amazon won't strip.</span></div>
+      <div class="row"><span class="num">04</span><span class="txt"><b>Targeted discovery:</b> paid placement to readers who already buy books like this.</span></div>
     </div>
   </div>
 </section>
@@ -274,7 +281,7 @@
   <div class="wrap">
     <p class="eyebrow reveal"><span class="dot"></span>Before a cent goes into promotion</p>
     <h2 class="reveal">A few things to <i class="ital">fix first.</i></h2>
-    <p class="body reveal">I read the book and cover closely; none of this is big, and it's not a service I'm selling — just the right order, because reviewers flag small errors.</p>
+    <p class="body reveal">I read the book and cover closely. None of this is big, and it's not a service I'm selling. It's just the right order to do things, because reviewers flag small errors.</p>
     <div class="fix-grid">
       <figure class="cover-fig reveal">
         <img src="./assets/fabrizio-cover.jpg" width="760" height="1196" alt="The Fabrizio book cover, showing the title, tagline and author name." />
@@ -283,24 +290,24 @@
       </figure>
       <div class="fix-lists">
         <div class="fix-group reveal">
-          <p class="gh">On the cover —</p>
+          <p class="gh">On the cover</p>
           <ol>
-            <li><span class="n">01</span><span>Tagline reads <code>a Novel based of true experiences</code> → should be "based on," or stronger, "inspired by true events" (the phrase the market knows).</span></li>
-            <li><span class="n">02</span><span>Author bio has <code>children ,and</code> — stray space before the comma.</span></li>
+            <li><span class="n">01</span><span>Tagline reads <code>a Novel based of true experiences</code>. It should be "based on," or stronger, <span class="hl">"inspired by true events"</span> (the phrase the market knows). <span class="suggest">My suggestion: "inspired by true events".</span></span></li>
+            <li><span class="n">02</span><span>Author bio has <code>children ,and</code>, a stray space before the comma. <span class="suggest">Should read "children, and".</span></span></li>
           </ol>
         </div>
         <div class="fix-group reveal">
-          <p class="gh">Make the brand agree with itself —</p>
+          <p class="gh">Make the brand agree with itself</p>
           <ol>
-            <li><span class="n">03</span><span>Pick ONE island spelling — bio says <code>St. Maarten</code>; elsewhere <code>Sint Maarten</code> / <code>St. Martin</code>.</span></li>
-            <li><span class="n">04</span><span>Cover says <code>Majorca</code>, most copy uses <code>Mallorca</code>. Pick one everywhere.</span></li>
-            <li><span class="n">05</span><span>Positioning line differs: cover <code>A Second Chance at Life</code> vs site <code>a fall from grace and path to redemption</code>. Choose one primary tagline.</span></li>
+            <li><span class="n">03</span><span>Pick ONE island spelling. The bio says <code>St. Maarten</code>; elsewhere it is <code>Sint Maarten</code> or <code>St. Martin</code>. <span class="suggest">My suggestion: standardise on "St. Maarten".</span></span></li>
+            <li><span class="n">04</span><span>Cover says <code>Majorca</code>, most copy uses <code>Mallorca</code>. <span class="suggest">My suggestion: use "Mallorca" everywhere.</span></span></li>
+            <li><span class="n">05</span><span>Positioning line differs: cover <code>A Second Chance at Life</code> vs site <code>a fall from grace and path to redemption</code>. <span class="suggest">My suggestion: lead with "A Second Chance at Life".</span></span></li>
           </ol>
         </div>
         <div class="fix-group reveal">
-          <p class="gh">Inside the book (one proofread pass) —</p>
+          <p class="gh">Inside the book (one proofread pass)</p>
           <ol>
-            <li><span class="n">06</span><span><code>Columbia</code> vs <code>Colombia</code>; the name <code>Cristina</code> vs <code>Cristiana</code>; <code>carnegy hall</code> → Carnegie Hall; <code>to much time</code> → too much; plus a few dropped words.</span></li>
+            <li><span class="n">06</span><span><code>Columbia</code> should be <code>Colombia</code>; the name <code>Cristina</code> and <code>Cristiana</code> need to agree; <code>carnegy hall</code> &rarr; Carnegie Hall; <code>to much time</code> &rarr; too much; plus a few dropped words.</span></li>
             <li><span class="n">07</span><span>All minor, all fixable in a single edit. Cheap to do, expensive to skip.</span></li>
           </ol>
         </div>
@@ -349,7 +356,7 @@
     <p class="eyebrow reveal"><span class="dot"></span>One honest note</p>
     <div class="callout reveal">
       <p class="kicker">Free of charge</p>
-      <p>Before any promotion, the manuscript and cover need one proofread pass (the items above); fixing them first protects everything spent after; not something I'm charging for — I'd rather tell you now than let a reviewer tell you later.</p>
+      <p>Before any promotion, the manuscript and cover deserve one proofread pass (the items above). Fixing them first protects everything you spend afterwards, and I'd rather flag it now than have a reviewer be the one to point it out.</p>
     </div>
   </div>
 </section>
@@ -357,12 +364,15 @@
 <!-- 10. Close -->
 <section class="close">
   <div class="wrap">
-    <h2 class="reveal">Fewer promises, <i class="ital">all of them kept.</i></h2>
-    <div class="btn-row reveal">
+    <h2 class="reveal">Let's give Fabrizio the launch it <i class="ital">deserves.</i></h2>
+    <div class="close-feature reveal">
+      <p class="close-lead">Start with the live demo. I've built a working version of the author landing page, crafted to capture leads and turn visitors into sales, so you can see exactly where readers would land and how the system works.</p>
       <a class="btn filled" href="./landing/">See the live landing page</a>
-      <a class="btn ghost" href="mailto:hi@jgmetzger.com">Let's talk it through</a>
     </div>
-    <p class="sig reveal">James</p>
+    <div class="close-talk reveal">
+      <p>Then, whenever you're ready, let's talk it through.</p>
+      <a class="btn ghost" href="mailto:hi@jgmetzger.com">Let's talk</a>
+    </div>
   </div>
 </section>
 
