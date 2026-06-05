@@ -54,7 +54,7 @@
   .cover-wrap{perspective:1900px; display:flex; align-items:center; justify-content:center; padding:1.5rem 0;}
   /* 3D book mockup built from the flat cover */
   .book3d{
-    --bw:290px; --bh:calc(var(--bw) * 1196 / 760); --thick:42px;
+    --bw:290px; --bh:calc(var(--bw) * 1196 / 760); --thick:54px;
     position:relative; width:var(--bw); height:var(--bh);
     transform-style:preserve-3d;
     transform:rotateY(-26deg) rotateX(4deg);
@@ -209,7 +209,7 @@
 
   @media (max-width:880px){
     .hero-grid{grid-template-columns:1fr; gap:2.6rem; text-align:center; padding-top:6rem;}
-    .book3d{--bw:230px; --thick:34px; transform:rotateY(-20deg) rotateX(3deg);}
+    .book3d{--bw:230px; --thick:44px; transform:rotateY(-20deg) rotateX(3deg);}
     .hero-btns{justify-content:center;}
     .author-grid{grid-template-columns:1fr; gap:2rem; justify-items:center; text-align:center;}
     .book-cards{grid-template-columns:1fr;}
