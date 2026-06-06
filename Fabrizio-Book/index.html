@@ -17,7 +17,18 @@
     --g1:#141416; --g2:#1e1e22; --g3:#2a2a30; --g4:#52525b; --g5:#8b8b96; --g6:#b4b4be;
     --sans:'Outfit',sans-serif; --serif:'Cormorant Garamond',Georgia,serif;
     --mono:'JetBrains Mono',monospace; --ease:cubic-bezier(0.16,1,0.3,1);
+    --nav-bg:rgba(10,10,11,0.62); --card-bg:linear-gradient(160deg, var(--g1), rgba(20,20,22,.3));
   }
+
+  /* Light theme */
+  [data-theme="light"]{
+    --black:#f7f6f3; --white:#ffffff; --offwhite:#1b1b1f;
+    --purple:#6a45f0; --purple-light:#5a3fd4; --purple-dark:#4a32b0;
+    --purple-glow:rgba(124,92,252,0.10);
+    --g1:#e7e4dd; --g2:#edeae3; --g3:#d9d4cb; --g4:#b6b0a4; --g5:#6e6a61; --g6:#43424a;
+    --nav-bg:rgba(247,246,243,0.72); --card-bg:linear-gradient(160deg, #ffffff, rgba(0,0,0,.015));
+  }
+  [data-theme="light"] .grain{opacity:.015;}
 
   *{box-sizing:border-box;}
   html{scroll-behavior:smooth;}
@@ -25,7 +36,23 @@
     margin:0; background:var(--black); color:var(--offwhite);
     font-family:var(--sans); font-weight:300; line-height:1.6;
     -webkit-font-smoothing:antialiased; overflow-x:hidden;
+    transition:background .4s var(--ease), color .4s var(--ease);
   }
+
+  /* Theme toggle */
+  .nav-right{display:flex; align-items:center; gap:1.2rem;}
+  .theme-toggle{
+    display:inline-flex; align-items:center; justify-content:center;
+    width:34px; height:34px; border-radius:50%; cursor:pointer;
+    background:transparent; border:1px solid var(--g3); color:var(--g6);
+    transition:color .3s var(--ease), border-color .3s var(--ease), transform .3s var(--ease);
+  }
+  .theme-toggle:hover{color:var(--purple-light); border-color:var(--purple-dark);}
+  .theme-toggle:active{transform:scale(.92);}
+  .theme-toggle svg{width:16px; height:16px;}
+  .theme-toggle .icon-moon{display:none;}
+  [data-theme="light"] .theme-toggle .icon-sun{display:none;}
+  [data-theme="light"] .theme-toggle .icon-moon{display:inline;}
 
   /* Fixed grain overlay */
   .grain{
@@ -60,7 +87,7 @@
   nav{
     position:sticky; top:0; z-index:100;
     backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px);
-    background:rgba(10,10,11,.62); border-bottom:1px solid var(--g1);
+    background:var(--nav-bg); border-bottom:1px solid var(--g1);
   }
   nav .wrap{display:flex; align-items:center; justify-content:space-between; padding-top:18px; padding-bottom:18px;}
   .wordmark{font-family:var(--sans); font-weight:600; font-size:18px; letter-spacing:-0.02em;}
@@ -103,7 +130,7 @@
   .card{
     position:relative; border:1px solid var(--g3); border-radius:14px;
     padding:1.8rem 1.8rem 1.8rem 2rem; overflow:hidden;
-    background:linear-gradient(160deg, var(--g1), rgba(20,20,22,.3));
+    background:var(--card-bg);
     transition:transform .4s var(--ease), border-color .4s var(--ease);
   }
   .card::before{content:""; position:absolute; left:0; top:0; bottom:0; width:2px; background:var(--purple);}
@@ -195,6 +222,10 @@
     html{scroll-behavior:auto;}
   }
 </style>
+<script>
+  // apply saved theme before paint to avoid a flash
+  try { var _t = localStorage.getItem('jg-theme'); if (_t) document.documentElement.setAttribute('data-theme', _t); } catch (e) {}
+</script>
 </head>
 <body>
 <div class="grain" aria-hidden="true"></div>
@@ -202,7 +233,13 @@
 <nav aria-label="Primary">
   <div class="wrap">
     <span class="wordmark">jgmetzger<span class="p">.</span></span>
-    <span class="tag">Launch Proposal / Confidential</span>
+    <div class="nav-right">
+      <span class="tag">Launch Proposal / Confidential</span>
+      <button class="theme-toggle" id="themeToggle" type="button" aria-label="Switch to light theme" title="Toggle light / dark">
+        <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.5"/><path d="M12 2v2M12 20v2M4.2 4.2l1.4 1.4M18.4 18.4l1.4 1.4M2 12h2M20 12h2M4.2 19.8l1.4-1.4M18.4 5.6l1.4-1.4"/></svg>
+        <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+      </button>
+    </div>
   </div>
 </nav>
 
@@ -404,6 +441,23 @@
         requestAnimationFrame(function(){ el.classList.add('in'); });
       });
     });
+
+    // Light / dark theme toggle (remembers the choice)
+    var root = document.documentElement;
+    var toggle = document.getElementById('themeToggle');
+    function setTheme(t){
+      if(t === 'light'){ root.setAttribute('data-theme','light'); }
+      else { root.removeAttribute('data-theme'); }
+      try { localStorage.setItem('jg-theme', t); } catch(e){}
+      if(toggle){ toggle.setAttribute('aria-label', t === 'light' ? 'Switch to dark theme' : 'Switch to light theme'); }
+    }
+    if(toggle){
+      // sync the label with whatever was applied pre-paint
+      setTheme(root.getAttribute('data-theme') === 'light' ? 'light' : 'dark');
+      toggle.addEventListener('click', function(){
+        setTheme(root.getAttribute('data-theme') === 'light' ? 'dark' : 'light');
+      });
+    }
   })();
 </script>
 </body>
